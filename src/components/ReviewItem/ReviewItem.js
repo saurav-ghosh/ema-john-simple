@@ -6,8 +6,8 @@ const ReviewItem = (props) => {
     return (
         <div className='review-products'>
             <h4>{name}</h4>
-            <p>quantity: {quantity}</p>
-            <p>price: {price}</p>
+            <p>Quantity: {quantity}</p>
+            <p>Price: {price}</p>
             <button
                 onClick={() => props.RemoveProduct(key)}
                 className="button">remove
