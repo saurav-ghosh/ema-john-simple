@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import fakeData from '../../fakeData';
 import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
@@ -7,21 +6,28 @@ import './Shop.css';
 import { Link } from 'react-router-dom';
 
 const Shop = () => {
-    const first10 = fakeData.slice(0, 15);
-    const [products, setProducts] = useState(first10);  
+    const [products, setProducts] = useState([]);  
     const [carts, setCarts] = useState([]);
     
+    useEffect(() => {
+        fetch('https://hidden-beach-06138.herokuapp.com/products')
+        .then(res => res.json())
+        .then(data => setProducts(data))
+    }, [])
+
     useEffect(() => {
         //cart
         const savedCart = getDatabaseCart();
         const productKeys = Object.keys(savedCart);
-        const cartProducts = productKeys.map(key => {
-            const product = fakeData.find(pd => pd.key === key);
-            product.quantity = savedCart[key];
-            return product;
-        });
-        setCarts(cartProducts);
-    }, []);
+        if(products.length > 0){
+            const cartProducts = productKeys.map(key => {
+                const product = products.find(pd => pd.key === key);
+                product.quantity = savedCart[key];
+                return product;
+            });
+            setCarts(cartProducts);
+        }
+    }, [products]);
 
     const handleProductAdd = (product) => {
         const toBeAddedKey = product.key;

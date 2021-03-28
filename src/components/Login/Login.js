@@ -34,8 +34,11 @@ function Login() {
     .then((result) => {
       var credential = result.credential;
       var token = credential.accessToken;
-      var user = result.user;
-      setUser(user);
+      var {displayName, email} = result.user;
+      const newUserInfo = {name: displayName, email};
+      setUser(newUserInfo);
+      setLoggedInUser(newUserInfo);
+      history.replace(from);
     }).catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -91,7 +94,9 @@ function Login() {
         newUserInfo.error = '';
         newUserInfo.success = true;
         setUser(newUserInfo);
+        setLoggedInUser(newUserInfo);
         updateUserName(user.name);
+        history.replace(from);
       })
       .catch((error) => {
         const newUserInfo = {...user};
